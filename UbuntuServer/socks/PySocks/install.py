@@ -9,7 +9,7 @@ def main(version):
         if(version == 0):
             os.system("pip3 install PySocks")
         elif(version == 1):
-            os.system("pip3 install PySocks")
+            os.system("pip install PySocks")
         else:
             print("PySocks install fail")
 
