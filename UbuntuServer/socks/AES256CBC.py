@@ -31,10 +31,12 @@ def Build_data_AES_16(data):
 
 
 def Encrypt_Salf_Data(data):
+    print(type(data))
     if (len(data) >= 16):
-        s1 = data[0:1]
-        s2 = data[len(data) - 1:len(data)]
-        s3 = data[1:len(data) - 1]
+        s1 = data[0]
+        s2 = data[len(data) - 1]
+        s3 = data[1:len(data) - 2]
+        print(s1,s2,s3)
         data = s2 + s3 + s1
         return data
     else:

@@ -6,11 +6,9 @@ def main(version):
     try:
         from Crypto.Cipher import AES
     except:
-        path = os.getcwd() + "\pycryptodome-3.17\\"
-        print(path,version)
+        # path = os.getcwd() + "/pycryptodome-3.17/"
         if(version == 0):
-            os.system("cd " + path)
-            os.system("python3 setup.py install")
+            os.system("bash install.sh")
         elif(version == 1):
             os.system("install.cmd")
         else:
