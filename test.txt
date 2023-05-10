@@ -1,0 +1,35 @@
+br-lan网桥地址目录 /etc/config/network
+vim I编辑 q！强制退出 wq保存退出
+
+
+install openwrt clash
+opkg update
+opkg install coreutils-nohup bash iptables dnsmasq-full curl ca-certificates ipset ip-full iptables-mod-tproxy iptables-mod-extra libcap libcap-bin ruby ruby-yaml kmod-tun kmod-inet-diag unzip luci-compat luci luci-base
+
+wget -O luci-app-openclash_0.45.112-beta_all.ipk https://github.com/vernesong/OpenClash/releases/download/v0.45.112-beta/luci-app-openclash_0.45.112-beta_all.ipk
+opkg remove dnsmasq && opkg install dnsmasq-full
+opkg install luci-app-openclash_0.45.112-beta_all.ipk
+
+
+
+
+
+
+wget -O clash-linux-mips64.tar.gz https://github.com/vernesong/OpenClash/releases/download/Clash/clash-linux-mips64.tar.gz
+tar -x 
+
+
+
+AdGuard
+网页管理界面 post:10079
+
+DNS 服务器 post:10081
+
+name:Operative1361
+password:$ZXdU7CTA@tk&*Zq3AfA2ns99x5B6x%S
+
+
+DNS：
+https://adguardteam.github.io/HostlistsRegistry/assets/filter_1.txt
+https://adguardteam.github.io/HostlistsRegistry/assets/filter_2.txt
+https://github.com/Yekanxingkong/Goole-Firefox-chrome/blob/5ff8c7110c5daedfc1b2040e69d808149f2f677e/interceptDNS.txt
