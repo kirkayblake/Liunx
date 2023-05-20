@@ -1,0 +1,65 @@
+
+config defaults
+	option syn_flood '1'
+	option synflood_burst '50'
+	option synflood_protect '1'
+	option input 'ACCEPT'
+	option output 'ACCEPT'
+	option forward 'REJECT'
+	option flow_offloading '0'
+	option flow_offloading_hw '0'
+	option fullcone '2'
+	option drop_invalid '1'
+
+config zone
+	option name 'lan'
+	option input 'ACCEPT'
+	option output 'ACCEPT'
+	option forward 'ACCEPT'
+	option network 'lan'
+	option log_limit '0'
+
+config zone
+	option name 'wan'
+	option output 'ACCEPT'
+	option masq '1'
+	option mtu_fix '1'
+	option input 'DROP'
+	option forward 'DROP'
+	option network 'wan'
+	option log_limit '0'
+
+config zone
+	option output 'ACCEPT'
+	option name 'wan2'
+	option input 'DROP'
+	option forward 'DROP'
+	option masq '1'
+	option mtu_fix '1'
+	option network 'wan2'
+	option log_limit '0'
+
+config zone 'ipsecserver'
+	option name 'ipsecserver'
+	option input 'ACCEPT'
+	option forward 'ACCEPT'
+	option output 'ACCEPT'
+	option network 'ipsec_server'
+
+config zone
+	option input 'ACCEPT'
+	option output 'ACCEPT'
+	option name 'network'
+	option network 'network'
+	option log_limit '0'
+	option forward 'ACCEPT'
+
+config forwarding
+	option dest 'wan'
+	option src 'lan'
+
+config forwarding
+	option dest 'network'
+	option src 'lan'
+	
+
