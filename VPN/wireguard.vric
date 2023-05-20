@@ -1,0 +1,10 @@
+WireGuard VPN协议
+linsongui
+wget -O wireguard-install.sh https://raw.githubusercontent.com/hwdsl2/wireguard-install/master/wireguard-install.sh
+angristan
+wget -O wireguard-install.sh https://raw.githubusercontent.com/angristan/wireguard-install/master/wireguard-install.sh
+bash wireguard-install.sh
+
+
+client
+sudo apt install wireguard

@@ -1,0 +1,10 @@
+kali：
+
+sudo -i  //转成root用户
+
+vim /etc/default/grub   //vim编辑此文件
+
+将 GRUB_TIMEOUT设置为0，保存退出，输入update-grub,再重启。
+
+
+

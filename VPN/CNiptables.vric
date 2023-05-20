@@ -1,0 +1,173 @@
+-t, --table table 对指定的表 table 进行操作， table 必须是 raw， nat，filter，mangle 中的一个。如果不指定此选项，默认的是 filter 表。
+
+# 通用匹配：源地址目标地址的匹配
+-p：指定要匹配的数据包协议类型；
+-s, --source [!] address[/mask] ：把指定的一个／一组地址作为源地址，按此规则进行过滤。当后面没有 mask 时，address 是一个地址，比如：192.168.1.1；当 mask 指定时，可以表示一组范围内的地址，比如：192.168.1.0/255.255.255.0。
+-d, --destination [!] address[/mask] ：地址格式同上，但这里是指定地址为目的地址，按此进行过滤。
+-i, --in-interface [!] <网络接口name> ：指定数据包的来自来自网络接口，比如最常见的 eth0 。注意：它只对 INPUT，FORWARD，PREROUTING 这三个链起作用。如果没有指定此选项， 说明可以来自任何一个网络接口。同前面类似，"!" 表示取反。
+-o, --out-interface [!] <网络接口name> ：指定数据包出去的网络接口。只对 OUTPUT，FORWARD，POSTROUTING 三个链起作用。
+
+# 查看管理命令
+-L, --list [chain] 列出链 chain 上面的所有规则，如果没有指定链，列出表上所有链的所有规则。
+
+# 规则管理命令
+-A, --append chain rule-specification 在指定链 chain 的末尾插入指定的规则，也就是说，这条规则会被放到最后，最后才会被执行。规则是由后面的匹配来指定。
+-I, --insert chain [rulenum] rule-specification 在链 chain 中的指定位置插入一条或多条规则。如果指定的规则号是1，则在链的头部插入。这也是默认的情况，如果没有指定规则号。
+-D, --delete chain rule-specification -D, --delete chain rulenum 在指定的链 chain 中删除一个或多个指定规则。
+-R num：Replays替换/修改第几条规则
+
+# 链管理命令（这都是立即生效的）
+-P, --policy chain target ：为指定的链 chain 设置策略 target。注意，只有内置的链才允许有策略，用户自定义的是不允许的。
+-F, --flush [chain] 清空指定链 chain 上面的所有规则。如果没有指定链，清空该表上所有链的所有规则。
+-N, --new-chain chain 用指定的名字创建一个新的链。
+-X, --delete-chain [chain] ：删除指定的链，这个链必须没有被其它任何规则引用，而且这条上必须没有任何规则。如果没有指定链名，则会删除该表中所有非内置的链。
+-E, --rename-chain old-chain new-chain ：用指定的新名字去重命名指定的链。这并不会对链内部造成任何影响。
+-Z, --zero [chain] ：把指定链，或者表中的所有链上的所有计数器清零。
+
+-j, --jump target <指定目标> ：即满足某条件时该执行什么样的动作。target 可以是内置的目标，比如 ACCEPT，也可以是用户自定义的链。
+-h：显示帮助信息；
+
+
+
+参数	作用
+-P	设置默认策略:iptables -P INPUT (DROP
+-F	清空规则链
+-L	查看规则链
+-A	在规则链的末尾加入新规则
+-I	num 在规则链的头部加入新规则
+-D	num 删除某一条规则
+-s	匹配来源地址IP/MASK，加叹号"!"表示除这个IP外。
+-d	匹配目标地址
+-i	网卡名称 匹配从这块网卡流入的数据
+-o	网卡名称 匹配从这块网卡流出的数据
+-p	匹配协议,如tcp,udp,icmp
+--dport num	匹配目标端口号
+--sport num	匹配来源端口号
+
+INPUT链 ：处理输入数据包。
+OUTPUT链 ：处理输出数据包。
+FORWARD链 ：处理转发数据包。
+PREROUTING链 ：用于目标地址转换（DNAT）。
+POSTOUTING链 ：用于源地址转换（SNAT）。
+
+我们现在用的比较多个功能有3个：
+
+filter 定义允许或者不允许的，只能做在3个链上：INPUT ，FORWARD ，OUTPUT
+nat 定义地址转换的，也只能做在3个链上：PREROUTING ，OUTPUT ，POSTROUTING
+mangle功能:修改报文原数据，是5个链都可以做：PREROUTING，INPUT，FORWARD，OUTPUT，POSTROUTING
+
+
+##########################################################################################
+查看端口下监听的进程
+lsof -i:-prot
+删除INPUT所有规则
+iptables -F INPUT
+删除nat所有规则
+iptables -F -t nat
+列出nat表下所有规则
+iptables -L -t nat -n --line-numbers
+删除nat表下number的规则
+iptables -t nat -D PREROUTING number
+iptables -t nat -D POSTROUTING number
+ping：不能加端口
+ping -I 指定IP 目标IP
+
+启动内核模块
+modprobe dummy
+创建网卡
+ip link add eth0 type dummy
+查看网卡
+ip link show eth0
+
+创建MAC
+ifconfig eth0 hw ether C8:D7:4A:4E:47:50
+ifconfig 无法使用需要安装net-tools
+apt-get install net-tools -y
+
+创建IP地址
+ip addr add 192.168.1.100/24 brd + dev eth0 label eth0:0
+
+ip addr add 192.1.1.1/24 brd + dev eth1 label eth1:0
+绑定接口
+ip link set dev eth0 up
+
+删除网卡
+$ sudo ip addr del 192.168.1.100/24 brd + dev eth0 label eth0:0 
+$ sudo ip link delete eth0 type dummy 
+$ sudo rmmod dummy
+
+查看所有网络接口
+lshw -class network
+
+以太网接口设置
+ethtool eth4 => eth0
+
+验证默认网关
+ip route show
+
+修改默认网关
+ip route add default via 10.102.66.1
+
+临时修改DNS
+/etc/resolv.conf
+nameserver 8.8.8.8
+nameserver 8.8.4.4
+
+清除接口所有配置信息
+ip addr flush eth0
+/etc/resolv.conf ==>链接 /run/systemd/resolve/stub-resolv.conf
+
+动态DHCP
+nano /etc/netplan/99_config.yaml
+config：
+	network:
+	  version: 2
+	  renderer: networkd
+	  ethernets:
+	    enp3s0: => 网关接口
+	      dhcp4: true
+完成后：sudo netplan apply
+
+静态ip，同动态，配置文件不同
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    eth0:
+      addresses:
+        - 10.10.10.2/24
+      routes:
+        - to: default
+          via: 10.10.10.1
+      nameservers:
+          search: [mydomain, otherdomain]
+          addresses: [10.10.10.1, 1.1.1.1]
+
+
+
+
+保存规则
+sudo sh -c "iptables-save > /etc/iptables-rules"
+# 加载NAT规则
+sudo sh -c "iptables-restore < /etc/iptables-rules"
+#如果要设置开机启动
+将 "iptables-restore < /etc/iptables-rules" 这行命令写入到 /etc/network/if-pre-up.d/iptables 文件（没有该文件就新建即可）中，必须先保存NAT规则
+
+
+
+###################################################################################
+-i 接口
+-o 接口
+--dport 端口
+--sport 端口
+-d 匹配ip
+-s 指定ip
+-j DNAT --to-destination
+-j SNAT --to-source
+-p udp/tcp
+iptables -t nat -A PREROUTING -p tcp -d 192.168.2.133 --dport 1007 -j DNAT --to-destination 192.1.1.1:1007
+iptables -t nat -A POSTROUTING -o eth3 -d 192.168.2.1/24 -j SNAT --to-source 192.168.101.2
+iptables -A FORWARD -i ens33 -p tcp --dport 1007 -j ACCEPT
+iptables -A FORWARD -i ens33 -p tcp --sport 1007 -j ACCEPT
+iptables -A INPUT -d 192.168.44.133 -p tcp --dport 50007 -j ACCEPT
+iptables -A INPUT -s 192.168.44.133 -p tcp --sport 50007 -j ACCEPT

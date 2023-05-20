@@ -13,11 +13,8 @@ def ran_send():
   return randomstr
 
 
-client = socket.socket(socket.AF_PACKET, socket.SOCK_STREAM)
-
-print(socket.AF_PACKET)
-client.bind("10.8.0.2:0")
-client.connect(('192.168.44.1', 50007))
+client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+client.connect(('192.168.44.131', 30066))
 key_size = b'f\xc8\xd9\x87\x99\xcd\x17B\x93\x8aWHwd\xb1\x0e\x1b.\xcf\xe4\xbb$\x90\xfa\x84\xd1\xd3\xcb\x9c\x9d^\xd7'
 iv = b'5\xc6\x88\x91\xd0\xb9\xcc\xe7\xb2\xc8\xe8\x17]>\x911'
 ci = 0

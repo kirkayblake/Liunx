@@ -4,7 +4,7 @@ import socket
 import os
 SOCKS_VERSION = 1
 #win"127.0.0.1" liunx\macos"0.0.0.0"
-IPv4 = "192.168.44.1"
+IPv4 = "192.168.44.131"
 IPv6 = ""
 port = 50007
 # socket.AF_UNIX

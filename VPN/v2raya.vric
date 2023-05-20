@@ -1,0 +1,7 @@
+apt install snapd -y
+
+snap install v2raya
+
+http://localhost:2017
+
+snap start v2raya
