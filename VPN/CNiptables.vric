@@ -58,6 +58,8 @@ mangle功能:修改报文原数据，是5个链都可以做：PREROUTING，INPUT
 
 
 ##########################################################################################
+展示网卡
+ip a
 查看端口下监听的进程
 lsof -i:-prot
 删除INPUT所有规则
@@ -71,7 +73,11 @@ iptables -t nat -D PREROUTING number
 iptables -t nat -D POSTROUTING number
 ping：不能加端口
 ping -I 指定IP 目标IP
+修改配置文件
+/etc/network/interfaces
 
+清理ARP
+ip neigh flush dev eth0
 启动内核模块
 modprobe dummy
 创建网卡
@@ -171,3 +177,14 @@ iptables -A FORWARD -i ens33 -p tcp --dport 1007 -j ACCEPT
 iptables -A FORWARD -i ens33 -p tcp --sport 1007 -j ACCEPT
 iptables -A INPUT -d 192.168.44.133 -p tcp --dport 50007 -j ACCEPT
 iptables -A INPUT -s 192.168.44.133 -p tcp --sport 50007 -j ACCEPT
+
+iptables -t raw -F zone_lan_helper
+iptables -X MINIUPNPD
+iptables -F SOCAT
+iptables -X SOCAT
+iptables -D INPUT 1
+iptables -D FORWARD 1
+iptables -D OUTPUT 2
+iptables -L -t nat --line-numbers
+iptables -t nat -D POSTROUTING 7
+iptables -t nat -A POSTROUTING -s 192.168.101.2 -o eth3 -j SNAT --to-source 192.168.101.1
